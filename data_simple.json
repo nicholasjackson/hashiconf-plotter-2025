@@ -1,0 +1,96 @@
+{
+  "layers": [
+    {
+      "blocks": [
+        {
+          "x": -10,
+          "y": 100,
+          "segments": [
+            {
+              "direction": "northeast",
+              "length": 100
+            }
+          ],
+          "color": "purple"
+        }
+      ]
+    },
+    {
+      "blocks": [
+        {
+          "x": -10,
+          "y": 180,
+          "segments": [
+            {
+              "direction": "northeast",
+              "length": 100
+            }
+          ],
+          "color": "purple"
+        }
+      ]
+    },
+    {
+      "blocks": [
+        {
+          "x": -10,
+          "y": 260,
+          "segments": [
+            {
+              "direction": "northeast",
+              "length": 100
+            }
+          ],
+          "color": "purple"
+        }
+      ]
+    },
+    {
+      "blocks": [
+        {
+          "x": -10,
+          "y": 340,
+          "segments": [
+            {
+              "direction": "northeast",
+              "length": 100
+            }
+          ],
+          "color": "purple"
+        }
+      ]
+    },
+    {
+      "blocks": [
+        {
+          "x": -10,
+          "y": 420,
+          "segments": [
+            {
+              "direction": "northeast",
+              "length": 100
+            }
+          ],
+          "color": "purple"
+        }
+      ]
+    },
+    {
+      "blocks": [
+        {
+          "x": 100,
+          "y": 320,
+          "segments": [
+            {
+              "direction": "northeast",
+              "length": 100
+            }
+          ],
+          "color": "purple"
+        }
+      ]
+    }
+
+
+  ]
+}
