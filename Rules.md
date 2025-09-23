@@ -7,10 +7,8 @@ Use the following methodology to generate the pattern:
 2. Row generation: Create blocks moving diagonally (increasing X for each block in the row)
 3. Row progression: After completing a row, move to next row by increasing Y by 80
 4. Repeat: Continue this process until out of space (Y > 400 and X > 260)
-
-Move any blocks starting at X=-10 and only have a single segment to the second layer.
-
-Ensure the ID numbers are continuous across both layers.
+5. Move any blocks starting at X=-10 and only have a single segment to the second layer.
+6. Ensure the ID numbers are continuous across both layers.
 
 ## Datastructure
 The data structure of the pattern is as follows:
@@ -112,21 +110,19 @@ The data structure of the pattern is as follows:
 * Each block must have a unique ID number for validation
 * Blocks within each layer should be ordered first by Y position (ascending), then by X position (ascending) for readability
 * Each block must have between 1 and 3 segments
-* Each segment must be between 40 and 500 units long
 * Each segment must be one of the following directions:
   * Northeast (45 degrees)
   * Southeast (315 degrees)
 * Distributions for the direction of segments is:
   * Northeast - 70%
   * Southeast - 30%
-* The color of each block must be purple (#B596C8) or cyan (#63C3DC)
 * The color distribution is:
-  * Purple - 60%
-  * Cyan - 40%
+  * Purple (#B596C8) - 60%
+  * Cyan (#63C3DC)- 40%
 * The weighting for the number of segments in each block is:
-  * 1 segments - 30%
   * 2 segments - 50%
   * 3 segments - 20%
+* Rows that only have a single block will only ever move northeast and have a single segment
 * Blocks must only have the lengths in multiples of 56 to ensure they
   align with the next row, e.g.
   * 56
@@ -137,8 +133,6 @@ The data structure of the pattern is as follows:
   * 336
   * 452
   * 560
-* The first two segments should never have a length greater than 170, the exception
-  is if it is pointing northeast and the final segment then it should be 560.
 
 ## Positioning of blocks
 * When X is -10, Y can only be:

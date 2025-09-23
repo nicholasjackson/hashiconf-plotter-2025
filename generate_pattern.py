@@ -47,72 +47,29 @@ def create_pattern(data_file: str) -> Dict:
     block_ids = []
 
     for layer in data["layers"]:
-        # Handle both old format (direct blocks) and new format (rows with blocks)
-        if "rows" in layer:
-            # New format with rows (logical grouping)
-            for row in layer["rows"]:
-                for block in row["blocks"]:
-                    # Get block ID if it exists
-                    block_id = block.get("id", None)
-                    block_x = block["x"]
-                    block_y = block["y"]
-
-                    # Store block info for later ID drawing
-                    if block_id is not None:
-                        block_ids.append(
-                            {
-                                "id": block_id,
-                                "x": block_x,
-                                "y": block_y,
-                                "color": block["color"],
-                            }
-                        )
-
-                    drawpipe_group(
-                        combined,
-                        block_x,
-                        block_y,
-                        block["segments"],
-                        block["color"],
-                    )
-
-                    if block["color"] == "purple":
-                        drawpipe_group(
-                            color1,
-                            block_x,
-                            block_y,
-                            block["segments"],
-                            block["color"],
-                        )
-                    elif block["color"] == "cyan":
-                        drawpipe_group(
-                            color2,
-                            block_x,
-                            block_y,
-                            block["segments"],
-                            block["color"],
-                        )
-        else:
-            # Old format with direct blocks (for backward compatibility)
-            for block in layer["blocks"]:
+        # New format with rows (logical grouping)
+        for row in layer["rows"]:
+            for block in row["blocks"]:
                 # Get block ID if it exists
                 block_id = block.get("id", None)
+                block_x = block["x"]
+                block_y = block["y"]
 
                 # Store block info for later ID drawing
                 if block_id is not None:
                     block_ids.append(
                         {
                             "id": block_id,
-                            "x": block["x"],
-                            "y": block["y"],
+                            "x": block_x,
+                            "y": block_y,
                             "color": block["color"],
                         }
                     )
 
                 drawpipe_group(
                     combined,
-                    block["x"],
-                    block["y"],
+                    block_x,
+                    block_y,
                     block["segments"],
                     block["color"],
                 )
@@ -120,16 +77,16 @@ def create_pattern(data_file: str) -> Dict:
                 if block["color"] == "purple":
                     drawpipe_group(
                         color1,
-                        block["x"],
-                        block["y"],
+                        block_x,
+                        block_y,
                         block["segments"],
                         block["color"],
                     )
                 elif block["color"] == "cyan":
                     drawpipe_group(
                         color2,
-                        block["x"],
-                        block["y"],
+                        block_x,
+                        block_y,
                         block["segments"],
                         block["color"],
                     )

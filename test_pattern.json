@@ -1,0 +1,260 @@
+{
+  "layers": [
+    {
+      "rows": [
+        {
+          "blocks": [
+            {
+              "id": 1,
+              "x": 75,
+              "y": -25,
+              "segments": [
+                {
+                  "direction": "southeast",
+                  "length": 56
+                },
+                {
+                  "direction": "northeast",
+                  "length": 56
+                }
+              ],
+              "color": "purple"
+            }
+          ]
+        },
+        {
+          "blocks": [
+            {
+              "id": 2,
+              "x": 116,
+              "y": 14,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 282
+                }
+              ],
+              "color": "purple"
+            }
+          ]
+        },
+        {
+          "blocks": [
+            {
+              "id": 7,
+              "x": -10,
+              "y": 220,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 56
+                },
+                {
+                  "direction": "southeast",
+                  "length": 113
+                }
+              ],
+              "color": "purple"
+            },
+            {
+              "id": 6,
+              "x": 36,
+              "y": 174,
+              "segments": [
+                {
+                  "direction": "southeast",
+                  "length": 170
+                }
+              ],
+              "color": "cyan"
+            },
+            {
+              "id": 10,
+              "x": 162,
+              "y": 300,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 452
+                },
+                {
+                  "direction": "northeast",
+                  "length": 170
+                }
+              ],
+              "color": "cyan"
+            }
+          ]
+        },
+        {
+          "blocks": [
+            {
+              "id": 9,
+              "x": -10,
+              "y": 300,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 226
+                },
+                {
+                  "direction": "northeast",
+                  "length": 113
+                },
+                {
+                  "direction": "northeast",
+                  "length": 56
+                }
+              ],
+              "color": "purple"
+            },
+            {
+              "id": 4,
+              "x": 159,
+              "y": 131,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 170
+                }
+              ],
+              "color": "purple"
+            }
+          ]
+        },
+        {
+          "blocks": [
+            {
+              "id": 13,
+              "x": 46,
+              "y": 404,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 56
+                },
+                {
+                  "direction": "southeast",
+                  "length": 56
+                }
+              ],
+              "color": "purple"
+            },
+            {
+              "id": 11,
+              "x": 92,
+              "y": 358,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 170
+                },
+                {
+                  "direction": "northeast",
+                  "length": 282
+                },
+                {
+                  "direction": "southeast",
+                  "length": 113
+                }
+              ],
+              "color": "purple"
+            },
+            {
+              "id": 8,
+              "x": 218,
+              "y": 232,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 113
+                },
+                {
+                  "direction": "southeast",
+                  "length": 282
+                }
+              ],
+              "color": "purple"
+            }
+          ]
+        },
+        {
+          "blocks": [
+            {
+              "id": 14,
+              "x": 126,
+              "y": 404,
+              "segments": [
+                {
+                  "direction": "southeast",
+                  "length": 170
+                },
+                {
+                  "direction": "northeast",
+                  "length": 113
+                }
+              ],
+              "color": "purple"
+            },
+            {
+              "id": 15,
+              "x": 252,
+              "y": 530,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 282
+                }
+              ],
+              "color": "purple"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rows": [
+        {
+          "blocks": [
+            {
+              "id": 3,
+              "x": -10,
+              "y": 60,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 113
+                }
+              ],
+              "color": "cyan"
+            },
+            {
+              "id": 5,
+              "x": -10,
+              "y": 140,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 170
+                }
+              ],
+              "color": "purple"
+            },
+            {
+              "id": 12,
+              "x": -10,
+              "y": 380,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 113
+                }
+              ],
+              "color": "purple"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
