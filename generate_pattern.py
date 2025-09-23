@@ -12,6 +12,74 @@ colors = {"purple": "#B596C8", "cyan": "#63C3DC", "white": "#FFFFFF"}
 pipe_width = 6
 
 
+def collect_block_paths(x, y, segments):
+    """Collect all pipe paths for a block to use in masking."""
+    paths = []
+    pipes = 7
+    
+    for pipe_index in range(pipes):
+        offset_angle = angles[segments[0]["direction"]] + math.radians(90)
+        
+        # Calculate offset position along perpendicular direction
+        start_x = x - (pipe_index * pipe_width) * math.cos(offset_angle)
+        start_y = y + (pipe_index * pipe_width) * math.sin(offset_angle)
+        
+        points = [(start_x, start_y)]
+        
+        # Calculate path points for each segment
+        for i, segment in enumerate(segments):
+            length = segment["length"]
+            angle = angles[segment["direction"]]
+            offset = 0
+            
+            if i == 0 and len(segments) == 1:
+                offset = 0
+            elif i == 0 and len(segments) > 1:
+                offset = pipe_index * pipe_width
+            elif i == len(segments) - 1:
+                offset = -(pipe_index * pipe_width)
+            
+            # Calculate end point of the segment
+            if segment["direction"] == "southeast":
+                end_x = points[i][0] + (length + offset) * math.cos(angle)
+                end_y = points[i][1] - (length + offset) * math.sin(angle)
+            else:
+                end_x = points[i][0] + (length - offset) * math.cos(angle)
+                end_y = points[i][1] - (length - offset) * math.sin(angle)
+            
+            points.append((end_x, end_y))
+        
+        paths.append(points)
+    
+    return paths
+
+
+def create_mask_definition(dwg, mask_id, paths_to_mask):
+    """Create a mask definition to prevent overlap between colors."""
+    if not paths_to_mask:
+        return None
+    
+    # Create mask definition
+    mask = dwg.defs.add(dwg.mask(id=mask_id))
+    
+    # White background (everything visible by default)
+    mask.add(dwg.rect(insert=(0, 0), size=(width, height), fill="white"))
+    
+    # Black paths (areas to be masked out/subtracted)
+    for path_points in paths_to_mask:
+        if len(path_points) > 1:
+            mask.add(dwg.polyline(
+                points=path_points,
+                stroke="black",
+                stroke_width=pipe_width,
+                fill="none",
+                stroke_linejoin="round",
+                stroke_linecap="square"
+            ))
+    
+    return mask_id
+
+
 def create_pattern(data_file: str) -> Dict:
     """
     Create an SVG with a single chevron starting from southwest corner,
@@ -24,10 +92,6 @@ def create_pattern(data_file: str) -> Dict:
     Returns:
         Dictionary with 3 SVGs for each color and combined
     """
-
-    color1 = svgwrite.Drawing(size=(width, height))
-    color2 = svgwrite.Drawing(size=(width, height))
-    combined = svgwrite.Drawing(size=(width, height))
 
     # Create SVG drawing
     color1 = svgwrite.Drawing(size=(width, height))
@@ -45,6 +109,10 @@ def create_pattern(data_file: str) -> Dict:
 
     # Store block information for ID drawing later
     block_ids = []
+    
+    # Track paths for masking
+    purple_paths = []
+    cyan_paths = []
 
     for layer in data["layers"]:
         # New format with rows (logical grouping)
@@ -66,29 +134,52 @@ def create_pattern(data_file: str) -> Dict:
                         }
                     )
 
+                # Collect paths for masking
+                paths = collect_block_paths(block_x, block_y, block["segments"])
+                if block["color"] == "purple":
+                    purple_paths.extend(paths)
+                elif block["color"] == "cyan":
+                    cyan_paths.extend(paths)
+
+    # Create mask definition - only mask cyan to avoid purple paths
+    cyan_mask_id = create_mask_definition(color2, "cyanMask", purple_paths)
+    
+    # Create groups - purple without mask, cyan with mask
+    purple_group = color1.g()
+    color1.add(purple_group)
+    
+    cyan_group = color2.g()
+    if cyan_mask_id:
+        cyan_group.attribs['mask'] = f"url(#{cyan_mask_id})"
+    color2.add(cyan_group)
+    
+    # Draw all blocks
+    for layer in data["layers"]:
+        for row in layer["rows"]:
+            for block in row["blocks"]:
                 drawpipe_group(
                     combined,
-                    block_x,
-                    block_y,
+                    block["x"],
+                    block["y"],
                     block["segments"],
                     block["color"],
                 )
 
                 if block["color"] == "purple":
-                    drawpipe_group(
-                        color1,
-                        block_x,
-                        block_y,
+                    drawpipe_group_to_element(
+                        purple_group,
+                        block["x"],
+                        block["y"],
                         block["segments"],
-                        block["color"],
+                        block["color"]
                     )
                 elif block["color"] == "cyan":
-                    drawpipe_group(
-                        color2,
-                        block_x,
-                        block_y,
+                    drawpipe_group_to_element(
+                        cyan_group,
+                        block["x"],
+                        block["y"],
                         block["segments"],
-                        block["color"],
+                        block["color"]
                     )
 
     # Add white border as the last element
@@ -160,6 +251,28 @@ def drawpipe_group(dwg, x, y, segments, color):
     return last_positions
 
 
+def drawpipe_group_to_element(element, x, y, segments, color):
+    """Draw pipe group to a specific element (like a masked group)."""
+    pipes = 7
+    draw_color = colors[color]
+
+    for i in range(pipes):
+        drawpipe(
+            element,
+            x,
+            y,
+            segments,
+            i,
+            draw_color,
+        )
+
+        # Alternate between white and the specified color
+        if draw_color != colors["white"]:
+            draw_color = colors["white"]
+        else:
+            draw_color = colors[color]
+
+
 def drawpipe(dwg, x, y, segments, pipe, color):
     """Draw a pipe shape with two segments and rounded joint."""
 
@@ -210,7 +323,15 @@ def drawpipe(dwg, x, y, segments, pipe, color):
         polyline_params["stroke_linejoin"] = "round"
         polyline_params["stroke_linecap"] = "square"
 
-    dwg.add(dwg.polyline(**polyline_params))
+    # Check if we're working with a Drawing or Group element
+    if hasattr(dwg, 'polyline'):
+        # It's a Drawing object
+        dwg.add(dwg.polyline(**polyline_params))
+    else:
+        # It's a Group or other element, need to create polyline from parent
+        import svgwrite
+        polyline = svgwrite.shapes.Polyline(**polyline_params)
+        dwg.add(polyline)
 
 
 def add_border(dwg, width, height, border_width=20, color="white"):
