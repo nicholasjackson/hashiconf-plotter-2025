@@ -80,14 +80,14 @@ def create_mask_definition(dwg, mask_id, paths_to_mask):
     return mask_id
 
 
-def create_pattern(data_file: str) -> Dict:
+def create_pattern(data_file: str, debug: bool = False) -> Dict:
     """
     Create an SVG with a single chevron starting from southwest corner,
     going northeast then turning southeast.
 
     Args:
-        width: Width of the SVG canvas
-        height: Height of the SVG canvas
+        data_file: Path to the JSON data file
+        debug: Whether to show grid and ID numbers
 
     Returns:
         Dictionary with 3 SVGs for each color and combined
@@ -187,36 +187,37 @@ def create_pattern(data_file: str) -> Dict:
     add_border(color2, width, height)
     add_border(combined, width, height)
 
-    # Add grid overlay (comment out to disable)
-    add_grid(color1, width, height)
-    add_grid(color2, width, height)
-    add_grid(combined, width, height)
+    # Add grid overlay and IDs only in debug mode
+    if debug:
+        add_grid(color1, width, height)
+        add_grid(color2, width, height)
+        add_grid(combined, width, height)
 
-    # Draw IDs last so they appear on top of everything
-    # Track used positions to avoid overlaps
-    used_positions = {}
+        # Draw IDs last so they appear on top of everything
+        # Track used positions to avoid overlaps
+        used_positions = {}
 
-    for block_info in block_ids:
-        # Calculate base position
-        x, y = block_info["x"], block_info["y"]
-        base_x = 10 if x < 0 else x
-        base_y = 400 if y > 400 else y
+        for block_info in block_ids:
+            # Calculate base position
+            x, y = block_info["x"], block_info["y"]
+            base_x = 10 if x < 0 else x
+            base_y = 400 if y > 400 else y
 
-        # Find available position near the base position
-        text_x, text_y = find_available_position(used_positions, base_x, base_y)
-        used_positions[(text_x, text_y)] = block_info["id"]
+            # Find available position near the base position
+            text_x, text_y = find_available_position(used_positions, base_x, base_y)
+            used_positions[(text_x, text_y)] = block_info["id"]
 
-        draw_block_id_at_position(
-            combined, text_x, text_y, block_info["id"], block_info["color"]
-        )
-        if block_info["color"] == "purple":
             draw_block_id_at_position(
-                color1, text_x, text_y, block_info["id"], block_info["color"]
+                combined, text_x, text_y, block_info["id"], block_info["color"]
             )
-        elif block_info["color"] == "cyan":
-            draw_block_id_at_position(
-                color2, text_x, text_y, block_info["id"], block_info["color"]
-            )
+            if block_info["color"] == "purple":
+                draw_block_id_at_position(
+                    color1, text_x, text_y, block_info["id"], block_info["color"]
+                )
+            elif block_info["color"] == "cyan":
+                draw_block_id_at_position(
+                    color2, text_x, text_y, block_info["id"], block_info["color"]
+                )
 
     return {
         "color1": color1.tostring(),
@@ -435,9 +436,10 @@ def main():
     """Generate and save the SVG pattern."""
     parser = argparse.ArgumentParser(description="Generate SVG patterns from JSON data")
     parser.add_argument("--data-file", required=True, help="Path to the JSON data file")
+    parser.add_argument("--debug", action="store_true", help="Enable debug mode with grid and ID numbers")
     args = parser.parse_args()
 
-    svg_content = create_pattern(args.data_file)
+    svg_content = create_pattern(args.data_file, debug=args.debug)
 
     with open("pattern_combined.svg", "w") as f:
         f.write(svg_content["combined"])
