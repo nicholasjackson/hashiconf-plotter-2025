@@ -1,4 +1,4 @@
-import axidraw
+from pyaxidraw import axidraw  # Import the module
 
 
 def plot_svg(filename: str):

@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.12"
 
 [[package]]
@@ -18,7 +18,7 @@ sdist = { hash = "sha256:c29ef0792dc8a2006a3a4abcb306e8d7fa5b93f8ce83c0c781eed22
 
 [package.metadata]
 requires-dist = [
-    { name = "axidrawinternal", path = "../../../../.cache/uv/sdists-v9/url/830d08c7eb0413e5/wH2jurP-JGFe0cHtbZik4/src/prebuilt_dependencies/axidrawinternal-3.9.6-py2.py3-none-any.whl" },
+    { name = "axidrawinternal", path = "../../../../AppData/Local/uv/cache/sdists-v9/url/830d08c7eb0413e5/g4vs7DYQtP23lLsl20--y/src/prebuilt_dependencies/axidrawinternal-3.9.6-py2.py3-none-any.whl" },
     { name = "axidrawinternal", marker = "extra == 'dev'", specifier = ">=3.0.0" },
     { name = "coverage", marker = "extra == 'dev'" },
     { name = "coverage", marker = "extra == 'test'" },
@@ -38,7 +38,7 @@ provides-extras = ["dev", "test", "hershey"]
 [[package]]
 name = "axidrawinternal"
 version = "3.9.6"
-source = { path = "../../../../.cache/uv/sdists-v9/url/830d08c7eb0413e5/wH2jurP-JGFe0cHtbZik4/src/prebuilt_dependencies/axidrawinternal-3.9.6-py2.py3-none-any.whl" }
+source = { path = "../../../../AppData/Local/uv/cache/sdists-v9/url/830d08c7eb0413e5/g4vs7DYQtP23lLsl20--y/src/prebuilt_dependencies/axidrawinternal-3.9.6-py2.py3-none-any.whl" }
 dependencies = [
     { name = "ink-extensions" },
     { name = "packaging" },
