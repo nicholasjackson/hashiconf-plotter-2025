@@ -5,24 +5,76 @@
         {
           "blocks": [
             {
-              "id": 5,
+              "id": 1,
               "segments": [
                 {
-                  "direction": "southeast",
-                  "length": 113
-                },
-                {
                   "direction": "northeast",
-                  "length": 113
-                },
-                {
-                  "direction": "southeast",
-                  "length": 170
+                  "length": 56
                 }
               ],
               "color": "cyan",
               "x": -10,
-              "y": 380
+              "y": 60
+            },
+            {
+              "id": 2,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 170
+                },
+                {
+                  "direction": "southeast",
+                  "length": 56
+                }
+              ],
+              "color": "purple",
+              "x": 28,
+              "y": 22
+            },
+            {
+              "id": 3,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 170
+                },
+                {
+                  "direction": "southeast",
+                  "length": 113
+                }
+              ],
+              "color": "cyan",
+              "x": 150,
+              "y": -100
+            }
+          ]
+        },
+        {
+          "blocks": [
+            {
+              "id": 4,
+              "segments": [
+                {
+                  "direction": "southeast",
+                  "length": 113
+                }
+              ],
+              "color": "cyan",
+              "x": -10,
+              "y": 140
+            },
+            {
+              "id": 5,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 113
+                }
+              ],
+              "color": "cyan",
+              "x": -6,
+              "y": 136
             },
             {
               "id": 6,
@@ -33,26 +85,6 @@
                 },
                 {
                   "direction": "southeast",
-                  "length": 170
-                },
-                {
-                  "direction": "northeast",
-                  "length": 113
-                }
-              ],
-              "color": "cyan",
-              "x": -6,
-              "y": 376
-            },
-            {
-              "id": 7,
-              "segments": [
-                {
-                  "direction": "northeast",
-                  "length": 113
-                },
-                {
-                  "direction": "southeast",
                   "length": 113
                 },
                 {
@@ -61,8 +93,8 @@
                 }
               ],
               "color": "cyan",
-              "x": 78,
-              "y": 292
+              "x": 74,
+              "y": 56
             }
           ]
         },
@@ -73,16 +105,20 @@
               "segments": [
                 {
                   "direction": "northeast",
-                  "length": 113
+                  "length": 56
                 },
                 {
                   "direction": "southeast",
+                  "length": 56
+                },
+                {
+                  "direction": "northeast",
                   "length": 113
                 }
               ],
               "color": "cyan",
-              "x": 52,
-              "y": 400
+              "x": -10,
+              "y": 300
             },
             {
               "id": 9,
@@ -93,39 +129,23 @@
                 },
                 {
                   "direction": "southeast",
-                  "length": 170
+                  "length": 113
                 },
                 {
                   "direction": "northeast",
-                  "length": 56
+                  "length": 560
                 }
               ],
               "color": "cyan",
-              "x": 136,
-              "y": 316
-            },
-            {
-              "id": 10,
-              "segments": [
-                {
-                  "direction": "northeast",
-                  "length": 113
-                },
-                {
-                  "direction": "southeast",
-                  "length": 113
-                }
-              ],
-              "color": "purple",
-              "x": 220,
-              "y": 232
+              "x": 32,
+              "y": 258
             }
           ]
         },
         {
           "blocks": [
             {
-              "id": 11,
+              "id": 10,
               "segments": [
                 {
                   "direction": "northeast",
@@ -133,16 +153,28 @@
                 },
                 {
                   "direction": "southeast",
-                  "length": 56
-                },
-                {
-                  "direction": "northeast",
                   "length": 113
                 }
               ],
-              "color": "purple",
-              "x": 132,
-              "y": 400
+              "color": "cyan",
+              "x": -10,
+              "y": 380
+            },
+            {
+              "id": 11,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 113
+                },
+                {
+                  "direction": "southeast",
+                  "length": 56
+                }
+              ],
+              "color": "cyan",
+              "x": 32,
+              "y": 338
             },
             {
               "id": 12,
@@ -153,51 +185,87 @@
                 },
                 {
                   "direction": "southeast",
-                  "length": 113
-                },
-                {
-                  "direction": "northeast",
-                  "length": 113
+                  "length": 170
                 }
               ],
               "color": "purple",
-              "x": 174,
-              "y": 358
-            },
-            {
-              "id": 13,
-              "segments": [
-                {
-                  "direction": "northeast",
-                  "length": 560
-                }
-              ],
-              "color": "cyan",
-              "x": 258,
-              "y": 274
+              "x": 116,
+              "y": 254
             }
           ]
         },
         {
           "blocks": [
             {
+              "id": 13,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 170
+                },
+                {
+                  "direction": "southeast",
+                  "length": 56
+                }
+              ],
+              "color": "purple",
+              "x": 52,
+              "y": 400
+            },
+            {
               "id": 14,
               "segments": [
                 {
                   "direction": "northeast",
+                  "length": 113
+                },
+                {
+                  "direction": "southeast",
                   "length": 56
+                }
+              ],
+              "color": "purple",
+              "x": 174,
+              "y": 278
+            },
+            {
+              "id": 15,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 113
+                },
+                {
+                  "direction": "southeast",
+                  "length": 56
+                }
+              ],
+              "color": "cyan",
+              "x": 258,
+              "y": 194
+            }
+          ]
+        },
+        {
+          "blocks": [
+            {
+              "id": 16,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 170
                 },
                 {
                   "direction": "southeast",
                   "length": 113
                 }
               ],
-              "color": "purple",
-              "x": 212,
+              "color": "cyan",
+              "x": 132,
               "y": 400
             },
             {
-              "id": 15,
+              "id": 17,
               "segments": [
                 {
                   "direction": "northeast",
@@ -210,10 +278,54 @@
               ],
               "color": "cyan",
               "x": 254,
-              "y": 358
+              "y": 278
+            }
+          ]
+        },
+        {
+          "blocks": [
+            {
+              "id": 18,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 113
+                },
+                {
+                  "direction": "southeast",
+                  "length": 170
+                },
+                {
+                  "direction": "northeast",
+                  "length": 170
+                }
+              ],
+              "color": "cyan",
+              "x": 212,
+              "y": 400
             },
             {
-              "id": 16,
+              "id": 19,
+              "segments": [
+                {
+                  "direction": "northeast",
+                  "length": 113
+                },
+                {
+                  "direction": "southeast",
+                  "length": 113
+                },
+                {
+                  "direction": "northeast",
+                  "length": 113
+                }
+              ],
+              "color": "purple",
+              "x": 296,
+              "y": 316
+            },
+            {
+              "id": 20,
               "segments": [
                 {
                   "direction": "northeast",
@@ -224,9 +336,9 @@
                   "length": 56
                 }
               ],
-              "color": "cyan",
-              "x": 338,
-              "y": 274
+              "color": "purple",
+              "x": 380,
+              "y": 232
             }
           ]
         }
@@ -237,39 +349,7 @@
         {
           "blocks": [
             {
-              "id": 1,
-              "segments": [
-                {
-                  "direction": "northeast",
-                  "length": 560
-                }
-              ],
-              "color": "cyan",
-              "x": -10,
-              "y": 60
-            }
-          ]
-        },
-        {
-          "blocks": [
-            {
-              "id": 2,
-              "segments": [
-                {
-                  "direction": "northeast",
-                  "length": 560
-                }
-              ],
-              "color": "cyan",
-              "x": -10,
-              "y": 140
-            }
-          ]
-        },
-        {
-          "blocks": [
-            {
-              "id": 3,
+              "id": 7,
               "segments": [
                 {
                   "direction": "northeast",
@@ -279,22 +359,6 @@
               "color": "cyan",
               "x": -10,
               "y": 220
-            }
-          ]
-        },
-        {
-          "blocks": [
-            {
-              "id": 4,
-              "segments": [
-                {
-                  "direction": "northeast",
-                  "length": 560
-                }
-              ],
-              "color": "purple",
-              "x": -10,
-              "y": 300
             }
           ]
         }

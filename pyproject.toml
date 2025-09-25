@@ -5,5 +5,9 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "axicli",
     "svgwrite>=1.4.3",
 ]
+
+[tool.uv.sources]
+axicli = { url = "https://cdn.evilmadscientist.com/dl/ad/public/AxiDraw_API.zip" }

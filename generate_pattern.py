@@ -4,9 +4,21 @@ import svgwrite
 import math
 import json
 import argparse
+import generate_json
 
-width = 300
-height = 416
+# Optional import for plotting
+try:
+    import plot
+
+    PLOT_AVAILABLE = True
+except ImportError:
+    PLOT_AVAILABLE = False
+
+scale = 1.5
+
+width = 300 * scale
+height = 416 * scale
+
 angles = {"northeast": math.radians(45), "southeast": math.radians(315)}
 colors = {"purple": "#B596C8", "cyan": "#63C3DC", "white": "#FFFFFF"}
 pipe_width = 6
@@ -16,29 +28,29 @@ def collect_block_paths(x, y, segments):
     """Collect all pipe paths for a block to use in masking."""
     paths = []
     pipes = 7
-    
+
     for pipe_index in range(pipes):
         offset_angle = angles[segments[0]["direction"]] + math.radians(90)
-        
+
         # Calculate offset position along perpendicular direction
         start_x = x - (pipe_index * pipe_width) * math.cos(offset_angle)
         start_y = y + (pipe_index * pipe_width) * math.sin(offset_angle)
-        
+
         points = [(start_x, start_y)]
-        
+
         # Calculate path points for each segment
         for i, segment in enumerate(segments):
             length = segment["length"]
             angle = angles[segment["direction"]]
             offset = 0
-            
+
             if i == 0 and len(segments) == 1:
                 offset = 0
             elif i == 0 and len(segments) > 1:
                 offset = pipe_index * pipe_width
             elif i == len(segments) - 1:
                 offset = -(pipe_index * pipe_width)
-            
+
             # Calculate end point of the segment
             if segment["direction"] == "southeast":
                 end_x = points[i][0] + (length + offset) * math.cos(angle)
@@ -46,11 +58,11 @@ def collect_block_paths(x, y, segments):
             else:
                 end_x = points[i][0] + (length - offset) * math.cos(angle)
                 end_y = points[i][1] - (length - offset) * math.sin(angle)
-            
+
             points.append((end_x, end_y))
-        
+
         paths.append(points)
-    
+
     return paths
 
 
@@ -58,25 +70,27 @@ def create_mask_definition(dwg, mask_id, paths_to_mask):
     """Create a mask definition to prevent overlap between colors."""
     if not paths_to_mask:
         return None
-    
+
     # Create mask definition
     mask = dwg.defs.add(dwg.mask(id=mask_id))
-    
+
     # White background (everything visible by default)
     mask.add(dwg.rect(insert=(0, 0), size=(width, height), fill="white"))
-    
+
     # Black paths (areas to be masked out/subtracted)
     for path_points in paths_to_mask:
         if len(path_points) > 1:
-            mask.add(dwg.polyline(
-                points=path_points,
-                stroke="black",
-                stroke_width=pipe_width,
-                fill="none",
-                stroke_linejoin="round",
-                stroke_linecap="square"
-            ))
-    
+            mask.add(
+                dwg.polyline(
+                    points=path_points,
+                    stroke="black",
+                    stroke_width=pipe_width,
+                    fill="none",
+                    stroke_linejoin="round",
+                    stroke_linecap="square",
+                )
+            )
+
     return mask_id
 
 
@@ -109,7 +123,7 @@ def create_pattern(data_file: str, debug: bool = False) -> Dict:
 
     # Store block information for ID drawing later
     block_ids = []
-    
+
     # Track paths for masking
     purple_paths = []
     cyan_paths = []
@@ -143,22 +157,27 @@ def create_pattern(data_file: str, debug: bool = False) -> Dict:
 
     # Create mask definition - only mask cyan to avoid purple paths
     cyan_mask_id = create_mask_definition(color2, "cyanMask", purple_paths)
-    
+
+    transform_scale = f"scale({scale})"
+
     # Create groups - purple without mask, cyan with mask
-    purple_group = color1.g()
+    purple_group = color1.g(transform=transform_scale)
     color1.add(purple_group)
-    
-    cyan_group = color2.g()
+
+    cyan_group = color2.g(transform=transform_scale)
     if cyan_mask_id:
-        cyan_group.attribs['mask'] = f"url(#{cyan_mask_id})"
+        cyan_group.attribs["mask"] = f"url(#{cyan_mask_id})"
     color2.add(cyan_group)
-    
+
+    combined_group = combined.g(transform=transform_scale)
+    combined.add(combined_group)
+
     # Draw all blocks
     for layer in data["layers"]:
         for row in layer["rows"]:
             for block in row["blocks"]:
                 drawpipe_group(
-                    combined,
+                    combined_group,
                     block["x"],
                     block["y"],
                     block["segments"],
@@ -171,7 +190,7 @@ def create_pattern(data_file: str, debug: bool = False) -> Dict:
                         block["x"],
                         block["y"],
                         block["segments"],
-                        block["color"]
+                        block["color"],
                     )
                 elif block["color"] == "cyan":
                     drawpipe_group_to_element(
@@ -179,7 +198,7 @@ def create_pattern(data_file: str, debug: bool = False) -> Dict:
                         block["x"],
                         block["y"],
                         block["segments"],
-                        block["color"]
+                        block["color"],
                     )
 
     # Add white border as the last element
@@ -325,12 +344,13 @@ def drawpipe(dwg, x, y, segments, pipe, color):
         polyline_params["stroke_linecap"] = "square"
 
     # Check if we're working with a Drawing or Group element
-    if hasattr(dwg, 'polyline'):
+    if hasattr(dwg, "polyline"):
         # It's a Drawing object
         dwg.add(dwg.polyline(**polyline_params))
     else:
         # It's a Group or other element, need to create polyline from parent
         import svgwrite
+
         polyline = svgwrite.shapes.Polyline(**polyline_params)
         dwg.add(polyline)
 
@@ -433,13 +453,78 @@ def add_grid(dwg, width, height, spacing=20):
 
 
 def main():
-    """Generate and save the SVG pattern."""
-    parser = argparse.ArgumentParser(description="Generate SVG patterns from JSON data")
-    parser.add_argument("--data-file", required=True, help="Path to the JSON data file")
-    parser.add_argument("--debug", action="store_true", help="Enable debug mode with grid and ID numbers")
+    """Generate JSON pattern and SVG files."""
+    parser = argparse.ArgumentParser(description="Generate pattern JSON and SVG files")
+
+    # Arguments
+    parser.add_argument(
+        "-s", "--seed", type=int, help="Random seed for reproducible patterns"
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable debug mode with grid and ID numbers",
+    )
+    parser.add_argument(
+        "--skip-json",
+        action="store_true",
+        help="Skip JSON generation and use existing pattern.json",
+    )
+    parser.add_argument(
+        "--json-file",
+        default="pattern.json",
+        help="JSON file name (default: pattern.json)",
+    )
+    parser.add_argument(
+        "--plot",
+        choices=["color1", "color2", "combined"],
+        help="Send specified SVG to the plotter after generation",
+    )
+
     args = parser.parse_args()
 
-    svg_content = create_pattern(args.data_file, debug=args.debug)
+    import random
+
+    # Generate JSON pattern (unless skipped)
+    if not args.skip_json:
+        # Set random seed if provided
+        if args.seed is not None:
+            random.seed(args.seed)
+
+        # Generate the pattern
+        print("Generating JSON pattern...")
+        pattern = generate_json.generate_pattern()
+
+        # Save to file
+        with open(args.json_file, "w") as f:
+            json.dump(pattern, f, indent=2)
+
+        # Count statistics
+        total_blocks = 0
+        purple_count = 0
+        cyan_count = 0
+
+        for layer in pattern["layers"]:
+            for row in layer["rows"]:
+                for block in row["blocks"]:
+                    total_blocks += 1
+                    if block["color"] == "purple":
+                        purple_count += 1
+                    else:
+                        cyan_count += 1
+
+        print(f"Generated pattern saved to {args.json_file}")
+        print(f"Total blocks: {total_blocks}")
+        print(
+            f"Purple blocks: {purple_count} ({purple_count / total_blocks * 100:.1f}%)"
+        )
+        print(f"Cyan blocks: {cyan_count} ({cyan_count / total_blocks * 100:.1f}%)")
+        print(f"Layers: {len(pattern['layers'])}")
+        print()
+
+    # Generate SVG patterns from JSON
+    print("Generating SVG files...")
+    svg_content = create_pattern(args.json_file, debug=args.debug)
 
     with open("pattern_combined.svg", "w") as f:
         f.write(svg_content["combined"])
@@ -448,7 +533,25 @@ def main():
     with open("pattern_color2.svg", "w") as f:
         f.write(svg_content["color2"])
 
-    print(f"Generated SVG patterns from {args.data_file}")
+    print(
+        f"Generated SVG patterns: pattern_combined.svg, pattern_color1.svg, pattern_color2.svg"
+    )
+    if args.debug:
+        print("Debug mode enabled - SVGs include grid and ID numbers")
+
+    # Send to plotter if requested
+    if args.plot:
+        if not PLOT_AVAILABLE:
+            print("\nWarning: Cannot send to plotter - axidraw module not installed")
+            print("Install with: pip install pyaxidraw")
+        else:
+            svg_file = f"pattern_{args.plot}.svg"
+            print(f"\nSending {svg_file} to plotter...")
+            try:
+                plot.plot_svg(svg_file)
+                print(f"Successfully sent {svg_file} to plotter")
+            except Exception as e:
+                print(f"Error sending to plotter: {e}")
 
 
 if __name__ == "__main__":
